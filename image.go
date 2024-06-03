@@ -12,21 +12,21 @@ func generateImage() image.Image {
 	greenArray := [512][512]int{}
 	blueArray := [512][512]int{}
 
-	redArray[0][0] = rand.Intn(255)
-	greenArray[0][0] = rand.Intn(255)
-	blueArray[0][0] = rand.Intn(255)
+	redArray[0][0] = rand.Intn(256)
+	greenArray[0][0] = rand.Intn(256)
+	blueArray[0][0] = rand.Intn(256)
 
-	redArray[0][511] = rand.Intn(255)
-	greenArray[0][511] = rand.Intn(255)
-	blueArray[0][511] = rand.Intn(255)
+	redArray[0][511] = rand.Intn(256)
+	greenArray[0][511] = rand.Intn(256)
+	blueArray[0][511] = rand.Intn(256)
 
-	redArray[511][0] = rand.Intn(255)
-	greenArray[511][0] = rand.Intn(255)
-	blueArray[511][0] = rand.Intn(255)
+	redArray[511][0] = rand.Intn(256)
+	greenArray[511][0] = rand.Intn(256)
+	blueArray[511][0] = rand.Intn(256)
 
-	redArray[511][511] = rand.Intn(255)
-	greenArray[511][511] = rand.Intn(255)
-	blueArray[511][511] = rand.Intn(255)
+	redArray[511][511] = rand.Intn(256)
+	greenArray[511][511] = rand.Intn(256)
+	blueArray[511][511] = rand.Intn(256)
 
 	// Fill individual arrays with interpolated values
 	fillArray(&redArray)
@@ -54,23 +54,15 @@ func generateImage() image.Image {
 }
 
 func fillArray(array *[512][512]int) {
-	// Top Row
-	for x := 1; x < 511; x++ {
-		(*array)[0][x] = getValue(x, 0, array)
-	}
-	// Middle chunk
-	for y := 1; y < 511; y++ {
+	// Calculate all interpolated values for the array
+	for y := 0; y < 512; y++ {
 		for x := 0; x < 512; x++ {
-			(*array)[y][x] = getValue(x, y, array)
+			calculateAndSet(x, y, array)
 		}
-	}
-	// Bottom row
-	for x := 1; x < 511; x++ {
-		(*array)[511][x] = getValue(x, 511, array)
 	}
 }
 
-func getValue(posX, posY int, array *[512][512]int) int {
+func calculateAndSet(posX, posY int, array *[512][512]int) {
 	// Calculate weights with floating-point division
 	topLeftWeight := float64((511-posX)*(511-posY)) / (511 * 511)
 	topRightWeight := float64(posX*(511-posY)) / (511 * 511)
@@ -83,5 +75,6 @@ func getValue(posX, posY int, array *[512][512]int) int {
 		bottomLeftWeight*float64(array[511][0]) +
 		bottomRightWeight*float64(array[511][511])
 
-	return int(calc)
+	// Set value in array
+	(*array)[posY][posX] = int(calc)
 }
