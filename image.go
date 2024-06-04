@@ -6,7 +6,7 @@ import (
 	"math/rand"
 )
 
-func generateImage() image.Image {
+func generateImage() {
 	// Create colour arrays with random corner values
 	redArray := [512][512]int{}
 	greenArray := [512][512]int{}
@@ -50,7 +50,7 @@ func generateImage() image.Image {
 		}
 	}
 
-	return img
+	imgState = img
 }
 
 func fillArray(array *[512][512]int) {
