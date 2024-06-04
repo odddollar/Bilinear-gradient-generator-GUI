@@ -2,9 +2,8 @@ package main
 
 import (
 	"image"
-	"image/png"
-	"os"
 
+	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
@@ -13,10 +12,13 @@ import (
 
 var imageCurrent image.Image
 
+var a fyne.App
+var mainWindow fyne.Window
+
 func main() {
 	// Create app and window
-	a := app.New()
-	w := a.NewWindow("Bilinear Gradient Generator GUI")
+	a = app.New()
+	mainWindow = a.NewWindow("Bilinear Gradient Generator GUI")
 
 	// Generate initial image
 	generateImage()
@@ -34,14 +36,10 @@ func main() {
 	generateButton.Importance = widget.HighImportance
 
 	// Button to save current image
-	saveButton := widget.NewButton("Save", func() {
-		// Save image
-		f, _ := os.Create("image.png")
-		_ = png.Encode(f, imageCurrent)
-	})
+	saveButton := widget.NewButton("Save PNG", saveImage)
 
 	// Create window layout
-	w.SetContent(
+	mainWindow.SetContent(
 		container.NewBorder(
 			nil,
 			container.NewBorder(
@@ -58,6 +56,6 @@ func main() {
 	)
 
 	// Set window properties and run
-	w.Show()
+	mainWindow.Show()
 	a.Run()
 }
