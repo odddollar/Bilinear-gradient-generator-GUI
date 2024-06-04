@@ -36,7 +36,7 @@ func generateImage() {
 	// Create image bounding box
 	upLeft := image.Point{X: 0, Y: 0}
 	lowRight := image.Point{X: 512, Y: 512}
-	img := image.NewRGBA(image.Rectangle{Min: upLeft, Max: lowRight})
+	img := image.NewNRGBA(image.Rectangle{Min: upLeft, Max: lowRight})
 
 	// Iterate through pixels
 	for y := 0; y < 512; y++ {
@@ -45,8 +45,8 @@ func generateImage() {
 			red := uint8(redArray[y][x])
 			green := uint8(greenArray[y][x])
 			blue := uint8(blueArray[y][x])
-			col := color.RGBA{R: red, G: green, B: blue, A: 0xff}
-			img.Set(x, y, col)
+			col := color.NRGBA{R: red, G: green, B: blue, A: 0xff}
+			img.SetNRGBA(x, y, col)
 		}
 	}
 
