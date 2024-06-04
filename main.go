@@ -57,6 +57,7 @@ func main() {
 	)
 
 	// Set window properties and run
+	mainWindow.SetFixedSize(true)
 	mainWindow.Show()
 	a.Run()
 }
