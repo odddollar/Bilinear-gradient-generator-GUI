@@ -50,7 +50,7 @@ func generateImage() {
 		}
 	}
 
-	imgState = img
+	imageCurrent = img
 }
 
 func fillArray(array *[512][512]int) {

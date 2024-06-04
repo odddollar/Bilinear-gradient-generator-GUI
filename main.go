@@ -11,7 +11,7 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-var imgState image.Image
+var imageCurrent image.Image
 
 func main() {
 	// Create app and window
@@ -22,14 +22,14 @@ func main() {
 	generateImage()
 
 	// Canvas to display current image
-	image := canvas.NewImageFromImage(imgState)
-	image.FillMode = canvas.ImageFillOriginal
+	imageDisplay := canvas.NewImageFromImage(imageCurrent)
+	imageDisplay.FillMode = canvas.ImageFillOriginal
 
 	// Button to generate new image
 	generateButton := widget.NewButton("Generate", func() {
 		generateImage()
-		image.Image = imgState
-		image.Refresh()
+		imageDisplay.Image = imageCurrent
+		imageDisplay.Refresh()
 	})
 	generateButton.Importance = widget.HighImportance
 
@@ -37,7 +37,7 @@ func main() {
 	saveButton := widget.NewButton("Save", func() {
 		// Save image
 		f, _ := os.Create("image.png")
-		_ = png.Encode(f, imgState)
+		_ = png.Encode(f, imageCurrent)
 	})
 
 	// Create window layout
@@ -53,7 +53,7 @@ func main() {
 			),
 			nil,
 			nil,
-			image,
+			imageDisplay,
 		),
 	)
 
