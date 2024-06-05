@@ -1,6 +1,6 @@
 [Details]
   Icon = "Icon.png"
   Name = "Bilinear Gradient Generator GUI"
-  ID = "com.bilinear-gradient-generator-gui.app"
+  ID = "com.bilinear-gradient-generator-gui.odddollar"
   Version = "0.1.0"
-  Build = 4
+  Build = 6

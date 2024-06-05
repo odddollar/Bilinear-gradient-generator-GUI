@@ -16,10 +16,9 @@ func saveImage() {
 		}
 		defer uc.Close()
 
-		// TODO: Ensure file has .png extension
-
 		// Encode and save image
 		png.Encode(uc, imageCurrent)
 	}, mainWindow)
+	d.SetFileName("image.png")
 	d.Show()
 }

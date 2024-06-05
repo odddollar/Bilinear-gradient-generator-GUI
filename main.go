@@ -7,6 +7,7 @@ import (
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 )
 
@@ -17,6 +18,7 @@ var imageCurrent image.Image
 var a fyne.App
 var mainWindow fyne.Window
 var imageDisplay *canvas.Image
+var aboutButton *widget.Button
 var generateButton *widget.Button
 var saveButton *widget.Button
 
@@ -31,6 +33,9 @@ func main() {
 	// Canvas to display current image
 	imageDisplay = canvas.NewImageFromImage(imageCurrent)
 	imageDisplay.FillMode = canvas.ImageFillOriginal
+
+	// Button to show about information
+	aboutButton = widget.NewButtonWithIcon("", theme.InfoIcon(), showAbout)
 
 	// Button to generate new image
 	generateButton = widget.NewButton("Generate", refreshImage)
@@ -47,7 +52,10 @@ func main() {
 				nil,
 				nil,
 				nil,
-				saveButton,
+				container.NewHBox(
+					saveButton,
+					aboutButton,
+				),
 				generateButton,
 			),
 			nil,
@@ -57,7 +65,7 @@ func main() {
 	)
 
 	// Set window properties and run
-	mainWindow.SetFixedSize(true)
+	//mainWindow.SetFixedSize(true)
 	mainWindow.Show()
 	a.Run()
 }
