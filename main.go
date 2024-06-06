@@ -2,6 +2,7 @@ package main
 
 import (
 	"image"
+	"image/color"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
@@ -17,6 +18,7 @@ var imageCurrent image.Image
 // Variables to hold widgets
 var a fyne.App
 var mainWindow fyne.Window
+var title *canvas.Text
 var imageDisplay *canvas.Image
 var aboutButton *widget.Button
 var generateButton *widget.Button
@@ -29,6 +31,12 @@ func main() {
 	// Create app and window
 	a = app.New()
 	mainWindow = a.NewWindow("Bilinear Gradient Generator GUI")
+
+	// Title
+	title = canvas.NewText("Bilinear Gradient Generator GUI", color.Black)
+	title.Alignment = fyne.TextAlignCenter
+	title.TextStyle.Bold = true
+	title.TextSize = 20
 
 	// Canvas to display current image
 	imageDisplay = canvas.NewImageFromImage(imageCurrent)
@@ -47,7 +55,7 @@ func main() {
 	// Create window layout
 	mainWindow.SetContent(
 		container.NewBorder(
-			nil,
+			title,
 			container.NewBorder(
 				nil,
 				nil,
