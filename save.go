@@ -18,6 +18,9 @@ func saveImage() {
 
 		// Encode and save image
 		png.Encode(uc, imageCurrent)
+
+		// Successful save
+		dialog.ShowInformation("Success", "Save successful", mainWindow)
 	}, mainWindow)
 	d.SetFileName("image.png")
 	d.Show()
