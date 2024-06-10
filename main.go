@@ -2,6 +2,7 @@ package main
 
 import (
 	"image"
+	"image/color"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
@@ -16,10 +17,10 @@ var imageCurrent image.Image
 
 // Holds corner pixels
 var (
-	topLeftPixel     image.NRGBA
-	topRightPixel    image.NRGBA
-	bottomLeftPixel  image.NRGBA
-	bottomRightPixel image.NRGBA
+	topLeftPixel     color.NRGBA
+	topRightPixel    color.NRGBA
+	bottomLeftPixel  color.NRGBA
+	bottomRightPixel color.NRGBA
 )
 
 // Variables to hold widgets
@@ -28,7 +29,7 @@ var (
 	mainWindow        fyne.Window
 	imageDisplay      *canvas.Image
 	aboutButton       *widget.Button
-	generateButton    *widget.Button
+	randomiseButton   *widget.Button
 	saveButton        *widget.Button
 	topLeftButton     *widget.Button
 	topRightButton    *widget.Button
@@ -38,9 +39,6 @@ var (
 )
 
 func main() {
-	// Generate initial image
-	generateImage()
-
 	// Create app and window
 	a = app.New()
 	mainWindow = a.NewWindow("Bilinear Gradient Generator GUI")
@@ -52,18 +50,21 @@ func main() {
 	// Button to show about information
 	aboutButton = widget.NewButtonWithIcon("", theme.InfoIcon(), showAbout)
 
-	// Button to generate new image
-	generateButton = widget.NewButton("Generate", refreshImage)
-	generateButton.Importance = widget.HighImportance
+	// Button to randomly generate new image
+	randomiseButton = widget.NewButton("Randomise", func() {
+		randomiseCorners()
+		refreshImage()
+	})
+	randomiseButton.Importance = widget.HighImportance
 
 	// Button to save current image
 	saveButton = widget.NewButton("Save PNG", saveImage)
 
 	// Buttons to change corner pixel values
-	topLeftButton = widget.NewButton("...", func() {})
-	topRightButton = widget.NewButton("...", func() {})
-	bottomLeftButton = widget.NewButton("...", func() {})
-	bottomRightButton = widget.NewButton("...", func() {})
+	topLeftButton = widget.NewButton("...", func() { pickColour(&topLeftPixel) })
+	topRightButton = widget.NewButton("...", func() { pickColour(&topRightPixel) })
+	bottomLeftButton = widget.NewButton("...", func() { pickColour(&bottomLeftPixel) })
+	bottomRightButton = widget.NewButton("...", func() { pickColour(&bottomRightPixel) })
 
 	// Create spacer with same width as button with "..." text
 	spacer = NewSpacer(widget.NewButton("...", func() {}).MinSize())
@@ -91,12 +92,16 @@ func main() {
 				saveButton,
 				aboutButton,
 			),
-			generateButton,
+			randomiseButton,
 		),
 		spacer,
 		spacer,
 		imageDisplay,
 	)
+
+	// Generate initial image
+	randomiseCorners()
+	refreshImage()
 
 	// Set window properties and run
 	mainWindow.SetContent(content)

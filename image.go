@@ -6,27 +6,64 @@ import (
 	"math/rand"
 )
 
+func randomiseCorners() {
+	// Randomise each corner
+	topLeftPixel = color.NRGBA{
+		R: uint8(rand.Intn(256)),
+		G: uint8(rand.Intn(256)),
+		B: uint8(rand.Intn(256)),
+		A: 255,
+	}
+	topRightPixel = color.NRGBA{
+		R: uint8(rand.Intn(256)),
+		G: uint8(rand.Intn(256)),
+		B: uint8(rand.Intn(256)),
+		A: 255,
+	}
+	bottomLeftPixel = color.NRGBA{
+		R: uint8(rand.Intn(256)),
+		G: uint8(rand.Intn(256)),
+		B: uint8(rand.Intn(256)),
+		A: 255,
+	}
+	bottomRightPixel = color.NRGBA{
+		R: uint8(rand.Intn(256)),
+		G: uint8(rand.Intn(256)),
+		B: uint8(rand.Intn(256)),
+		A: 255,
+	}
+}
+
+func refreshImage() {
+	// Generate new image from corner values
+	generateImage()
+
+	// Update image display
+	imageDisplay.Image = imageCurrent
+	imageDisplay.Refresh()
+}
+
 func generateImage() {
-	// Create colour arrays with random corner values
-	redArray := [512][512]int{}
-	greenArray := [512][512]int{}
-	blueArray := [512][512]int{}
+	// Convert corner pixel data type to individual channel arrays
+	redArray := [512][512]uint8{}
+	greenArray := [512][512]uint8{}
+	blueArray := [512][512]uint8{}
 
-	redArray[0][0] = rand.Intn(256)
-	greenArray[0][0] = rand.Intn(256)
-	blueArray[0][0] = rand.Intn(256)
+	redArray[0][0] = topLeftPixel.R
+	greenArray[0][0] = topLeftPixel.G
+	blueArray[0][0] = topLeftPixel.B
 
-	redArray[0][511] = rand.Intn(256)
-	greenArray[0][511] = rand.Intn(256)
-	blueArray[0][511] = rand.Intn(256)
+	redArray[0][511] = topRightPixel.R
+	greenArray[0][511] = topRightPixel.G
+	blueArray[0][511] = topRightPixel.B
 
-	redArray[511][0] = rand.Intn(256)
-	greenArray[511][0] = rand.Intn(256)
-	blueArray[511][0] = rand.Intn(256)
+	redArray[511][0] = bottomLeftPixel.R
+	greenArray[511][0] = bottomLeftPixel.G
+	blueArray[511][0] = bottomLeftPixel.B
 
-	redArray[511][511] = rand.Intn(256)
-	greenArray[511][511] = rand.Intn(256)
-	blueArray[511][511] = rand.Intn(256)
+	redArray[511][511] = bottomRightPixel.R
+	greenArray[511][511] = bottomRightPixel.G
+	blueArray[511][511] = bottomRightPixel.B
 
 	// Fill individual arrays with interpolated values
 	fillArray(&redArray)
@@ -53,7 +90,7 @@ func generateImage() {
 	imageCurrent = img
 }
 
-func fillArray(array *[512][512]int) {
+func fillArray(array *[512][512]uint8) {
 	// Calculate all interpolated values for the array
 	for y := 0; y < 512; y++ {
 		for x := 0; x < 512; x++ {
@@ -62,7 +99,7 @@ func fillArray(array *[512][512]int) {
 	}
 }
 
-func calculateAndSet(posX, posY int, array *[512][512]int) {
+func calculateAndSet(posX, posY int, array *[512][512]uint8) {
 	// Calculate weights with floating-point division
 	topLeftWeight := float64((511-posX)*(511-posY)) / (511 * 511)
 	topRightWeight := float64(posX*(511-posY)) / (511 * 511)
@@ -76,5 +113,5 @@ func calculateAndSet(posX, posY int, array *[512][512]int) {
 		bottomRightWeight*float64(array[511][511])
 
 	// Set value in array
-	(*array)[posY][posX] = int(calc)
+	(*array)[posY][posX] = uint8(calc)
 }
