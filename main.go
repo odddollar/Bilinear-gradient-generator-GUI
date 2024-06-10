@@ -15,22 +15,27 @@ import (
 var imageCurrent image.Image
 
 // Holds corner pixels
-var topLeftPixel image.NRGBA
-var topRightPixel image.NRGBA
-var bottomLeftPixel image.NRGBA
-var bottomRightPixel image.NRGBA
+var (
+	topLeftPixel     image.NRGBA
+	topRightPixel    image.NRGBA
+	bottomLeftPixel  image.NRGBA
+	bottomRightPixel image.NRGBA
+)
 
 // Variables to hold widgets
-var a fyne.App
-var mainWindow fyne.Window
-var imageDisplay *canvas.Image
-var aboutButton *widget.Button
-var generateButton *widget.Button
-var saveButton *widget.Button
-var topLeftButton *widget.Button
-var topRightButton *widget.Button
-var bottomLeftButton *widget.Button
-var bottomRightButton *widget.Button
+var (
+	a                 fyne.App
+	mainWindow        fyne.Window
+	imageDisplay      *canvas.Image
+	aboutButton       *widget.Button
+	generateButton    *widget.Button
+	saveButton        *widget.Button
+	topLeftButton     *widget.Button
+	topRightButton    *widget.Button
+	bottomLeftButton  *widget.Button
+	bottomRightButton *widget.Button
+	spacer            *Spacer
+)
 
 func main() {
 	// Generate initial image
@@ -60,6 +65,9 @@ func main() {
 	bottomLeftButton = widget.NewButton("...", func() {})
 	bottomRightButton = widget.NewButton("...", func() {})
 
+	// Create spacer with same width as button with "..." text
+	spacer = NewSpacer(widget.NewButton("...", func() {}).MinSize())
+
 	// Create window layout
 	content := container.NewBorder(
 		container.NewBorder(
@@ -85,14 +93,13 @@ func main() {
 			),
 			generateButton,
 		),
-		nil,
-		nil,
+		spacer,
+		spacer,
 		imageDisplay,
 	)
 
 	// Set window properties and run
 	mainWindow.SetContent(content)
-	//mainWindow.SetFixedSize(true)
 	mainWindow.Show()
 	a.Run()
 }
