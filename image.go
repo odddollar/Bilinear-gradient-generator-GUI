@@ -48,27 +48,33 @@ func generateImage() {
 	redArray := [512][512]uint8{}
 	greenArray := [512][512]uint8{}
 	blueArray := [512][512]uint8{}
+	alphaArray := [512][512]uint8{}
 
 	redArray[0][0] = topLeftPixel.R
 	greenArray[0][0] = topLeftPixel.G
 	blueArray[0][0] = topLeftPixel.B
+	alphaArray[0][0] = topLeftPixel.A
 
 	redArray[0][511] = topRightPixel.R
 	greenArray[0][511] = topRightPixel.G
 	blueArray[0][511] = topRightPixel.B
+	alphaArray[0][511] = topRightPixel.A
 
 	redArray[511][0] = bottomLeftPixel.R
 	greenArray[511][0] = bottomLeftPixel.G
 	blueArray[511][0] = bottomLeftPixel.B
+	alphaArray[511][0] = bottomLeftPixel.A
 
 	redArray[511][511] = bottomRightPixel.R
 	greenArray[511][511] = bottomRightPixel.G
 	blueArray[511][511] = bottomRightPixel.B
+	alphaArray[511][511] = bottomRightPixel.A
 
 	// Fill individual arrays with interpolated values
 	fillArray(&redArray)
 	fillArray(&greenArray)
 	fillArray(&blueArray)
+	fillArray(&alphaArray)
 
 	// Create image bounding box
 	upLeft := image.Point{X: 0, Y: 0}
@@ -82,7 +88,8 @@ func generateImage() {
 			red := uint8(redArray[y][x])
 			green := uint8(greenArray[y][x])
 			blue := uint8(blueArray[y][x])
-			col := color.NRGBA{R: red, G: green, B: blue, A: 0xff}
+			alpha := uint8(alphaArray[y][x])
+			col := color.NRGBA{R: red, G: green, B: blue, A: alpha}
 			img.SetNRGBA(x, y, col)
 		}
 	}
