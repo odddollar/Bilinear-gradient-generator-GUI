@@ -13,7 +13,10 @@ import (
 )
 
 // Holds global image state
-var imageCurrent image.Image
+var (
+	imageCurrent image.Image
+	checkerboard image.Image
+)
 
 // Holds corner pixels
 var (
@@ -100,6 +103,7 @@ func main() {
 	)
 
 	// Generate initial image
+	generateCheckerboard()
 	randomiseCorners()
 	refreshImage()
 

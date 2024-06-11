@@ -38,8 +38,11 @@ func refreshImage() {
 	// Generate new image from corner values
 	generateImage()
 
+	// Draw checkerboard then overlay image
+	img := combineCheckerboard()
+
 	// Update image display
-	imageDisplay.Image = imageCurrent
+	imageDisplay.Image = img
 	imageDisplay.Refresh()
 }
 
