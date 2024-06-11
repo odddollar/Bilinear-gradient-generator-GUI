@@ -6,6 +6,7 @@ import (
 	"math/rand"
 )
 
+// Randomise values in all corner pixel variables
 func randomiseCorners() {
 	// Randomise each corner
 	topLeftPixel = color.NRGBA{
@@ -34,6 +35,7 @@ func randomiseCorners() {
 	}
 }
 
+// Refresh displayed image
 func refreshImage() {
 	// Generate new image from corner values
 	generateImage()
@@ -46,6 +48,7 @@ func refreshImage() {
 	imageDisplay.Refresh()
 }
 
+// Generate gradient from values in corner pixels and update image state
 func generateImage() {
 	// Convert corner pixel data type to individual channel arrays
 	redArray := [512][512]uint8{}
@@ -100,8 +103,8 @@ func generateImage() {
 	imageCurrent = img
 }
 
+// Calculate all interpolated values for array
 func fillArray(array *[512][512]uint8) {
-	// Calculate all interpolated values for the array
 	for y := 0; y < 512; y++ {
 		for x := 0; x < 512; x++ {
 			calculateAndSet(x, y, array)
@@ -109,6 +112,7 @@ func fillArray(array *[512][512]uint8) {
 	}
 }
 
+// Calculate and update individual value for position in array
 func calculateAndSet(posX, posY int, array *[512][512]uint8) {
 	// Calculate weights with floating-point division
 	topLeftWeight := float64((511-posX)*(511-posY)) / (511 * 511)

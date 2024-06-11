@@ -7,6 +7,7 @@ import (
 	"fyne.io/fyne/v2/dialog"
 )
 
+// Save current image state (without checkerboard)
 func saveImage() {
 	// Create new dialog to save image
 	d := dialog.NewFileSave(func(uc fyne.URIWriteCloser, err error) {

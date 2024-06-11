@@ -6,6 +6,7 @@ import (
 	"image/draw"
 )
 
+// Generate checkerboard and update checkerboard state
 func generateCheckerboard() {
 	// Size of image and individual tiles
 	width := 512
@@ -33,6 +34,7 @@ func generateCheckerboard() {
 	checkerboard = img
 }
 
+// Overlay image state on checkerboard and return new image
 func combineCheckerboard() image.Image {
 	// Create image bounding box
 	upLeft := image.Point{X: 0, Y: 0}

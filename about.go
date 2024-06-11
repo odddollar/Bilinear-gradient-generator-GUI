@@ -8,6 +8,7 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
+// Show about information in dialog
 func showAbout() {
 	// Create layout
 	// Separate markdown widget for better spacing

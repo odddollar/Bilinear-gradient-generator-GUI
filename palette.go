@@ -6,6 +6,7 @@ import (
 	"fyne.io/fyne/v2/dialog"
 )
 
+// Choose new colour for corner
 func pickColour(cornerColour *color.NRGBA) {
 	// Open advanced colour picker dialog and set initial colour to current one
 	d := dialog.NewColorPicker("Colour", "Pick corner colour", func(c color.Color) {

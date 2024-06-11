@@ -5,44 +5,44 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-// Custom widget that serves as a spacer
+// Custom widget that serves as spacer
 type Spacer struct {
 	widget.BaseWidget
 	minSize fyne.Size
 }
 
-// Creates a new Spacer widget
+// Creates new Spacer widget
 func NewSpacer(minSize fyne.Size) *Spacer {
 	s := &Spacer{minSize: minSize}
 	s.ExtendBaseWidget(s)
 	return s
 }
 
-// Returns a new renderer for the spacer
+// Returns new renderer for spacer
 func (s *Spacer) CreateRenderer() fyne.WidgetRenderer {
 	return &spacerRenderer{spacer: s}
 }
 
-// Renderer for the Spacer widget
+// Renderer for Spacer widget
 type spacerRenderer struct {
 	spacer *Spacer
 }
 
-// Returns the minimum size of the spacer
+// Returns minimum size of spacer
 func (r *spacerRenderer) MinSize() fyne.Size {
 	return r.spacer.minSize
 }
 
-// Does nothing as the spacer doesn't have any child widgets
+// Does nothing as spacer doesn't have any child widgets
 func (r *spacerRenderer) Layout(size fyne.Size) {}
 
-// Refreshes the spacer
+// Refreshes spacer
 func (r *spacerRenderer) Refresh() {}
 
-// Returns the child widgets of the spacer
+// Returns child widgets of spacer
 func (r *spacerRenderer) Objects() []fyne.CanvasObject {
 	return nil
 }
 
-// Does nothing as the spacer doesn't hold any resources
+// Does nothing as spacer doesn't hold any resources
 func (r *spacerRenderer) Destroy() {}
