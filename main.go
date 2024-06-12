@@ -31,9 +31,10 @@ var (
 	a                 fyne.App
 	mainWindow        fyne.Window
 	imageDisplay      *canvas.Image
-	aboutButton       *widget.Button
 	randomiseButton   *widget.Button
 	saveButton        *widget.Button
+	optionsButton     *widget.Button
+	aboutButton       *widget.Button
 	topLeftButton     *widget.Button
 	topRightButton    *widget.Button
 	bottomLeftButton  *widget.Button
@@ -50,9 +51,6 @@ func main() {
 	imageDisplay = canvas.NewImageFromImage(imageCurrent)
 	imageDisplay.FillMode = canvas.ImageFillOriginal
 
-	// Button to show about information
-	aboutButton = widget.NewButtonWithIcon("", theme.InfoIcon(), showAbout)
-
 	// Button to randomly generate new image
 	randomiseButton = widget.NewButton("Randomise", func() {
 		randomiseCorners()
@@ -62,6 +60,12 @@ func main() {
 
 	// Button to save current image
 	saveButton = widget.NewButton("Save PNG", saveImage)
+
+	// Button to open options
+	optionsButton = widget.NewButtonWithIcon("", theme.MenuIcon(), showOptions)
+
+	// Button to show about information
+	aboutButton = widget.NewButtonWithIcon("", theme.InfoIcon(), showAbout)
 
 	// Buttons to change corner pixel values
 	topLeftButton = widget.NewButton("...", func() { pickColour(&topLeftPixel) })
@@ -93,6 +97,7 @@ func main() {
 			nil,
 			container.NewHBox(
 				saveButton,
+				optionsButton,
 				aboutButton,
 			),
 			randomiseButton,
