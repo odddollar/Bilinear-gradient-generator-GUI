@@ -6,45 +6,40 @@ import (
 	"math/rand"
 )
 
+// Helper function to generate number within range
+func randomRange(min, max int) uint8 {
+	return uint8(rand.Intn(max-min) + min)
+}
+
 // Randomise values in all corner pixel variables
 func randomiseCorners() {
-	// Create variables to hold alpha values
-	var tla, tra, bla, bra uint8
-
-	// Should alpha values be randomised
-	if a.Preferences().BoolWithFallback("randomiseAlpha", false) {
-		tla = uint8(rand.Intn(256))
-		tra = uint8(rand.Intn(256))
-		bla = uint8(rand.Intn(256))
-		bra = uint8(rand.Intn(256))
-	} else {
-		tla, tra, bla, bra = 255, 255, 255, 255
-	}
+	// What minimum alpha should be used
+	minAlpha := a.Preferences().IntWithFallback("minimumAlpha", 255)
 
 	// Randomise each corner
 	topLeftPixel = color.NRGBA{
 		R: uint8(rand.Intn(256)),
 		G: uint8(rand.Intn(256)),
 		B: uint8(rand.Intn(256)),
-		A: tla,
+		A: randomRange(minAlpha, 256),
 	}
 	topRightPixel = color.NRGBA{
 		R: uint8(rand.Intn(256)),
 		G: uint8(rand.Intn(256)),
 		B: uint8(rand.Intn(256)),
-		A: tra,
+		A: randomRange(minAlpha, 256),
 	}
 	bottomLeftPixel = color.NRGBA{
 		R: uint8(rand.Intn(256)),
 		G: uint8(rand.Intn(256)),
 		B: uint8(rand.Intn(256)),
-		A: bla,
+		A: randomRange(minAlpha, 256),
 	}
 	bottomRightPixel = color.NRGBA{
 		R: uint8(rand.Intn(256)),
 		G: uint8(rand.Intn(256)),
 		B: uint8(rand.Intn(256)),
-		A: bra,
+		A: randomRange(minAlpha, 256),
 	}
 }
 
