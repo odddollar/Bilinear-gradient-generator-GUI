@@ -29,6 +29,7 @@ func showOptions() {
 
 	// Hide corner button checkbox
 	hideCorners := widget.NewCheck("", func(b bool) {})
+	hideCorners.SetChecked(a.Preferences().Bool("hideCorners"))
 
 	// Create options layout
 	options := []*widget.FormItem{
@@ -49,6 +50,14 @@ func showOptions() {
 				// Update minimum alpha
 				t, _ := strconv.Atoi(alphaEntry.Text)
 				a.Preferences().SetInt("minimumAlpha", t)
+
+				// Update hide corners
+				a.Preferences().SetBool("hideCorners", hideCorners.Checked)
+				if hideCorners.Checked {
+					mainWindow.SetContent(noCornerButtonContent)
+				} else {
+					mainWindow.SetContent(cornerButtonContent)
+				}
 			}
 		},
 		mainWindow,

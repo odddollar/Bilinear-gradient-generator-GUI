@@ -42,6 +42,13 @@ var (
 	spacer            *Spacer
 )
 
+// Variables to hold different layouts
+// One holds layout with corner buttons, the other without
+var (
+	cornerButtonContent   *fyne.Container
+	noCornerButtonContent *fyne.Container
+)
+
 func main() {
 	// Create app and window
 	a = app.New()
@@ -76,8 +83,8 @@ func main() {
 	// Create spacer with same width as button with "..." text
 	spacer = NewSpacer(widget.NewButton("...", func() {}).MinSize())
 
-	// Create window layout
-	content := container.NewBorder(
+	// Create layout with corner buttons
+	cornerButtonContent = container.NewBorder(
 		container.NewBorder(
 			nil,
 			nil,
@@ -107,13 +114,38 @@ func main() {
 		imageDisplay,
 	)
 
+	// Create layout without corner buttons
+	noCornerButtonContent = container.NewBorder(
+		nil,
+		container.NewBorder(
+			nil,
+			nil,
+			nil,
+			container.NewHBox(
+				saveButton,
+				optionsButton,
+				aboutButton,
+			),
+			randomiseButton,
+		),
+		nil,
+		nil,
+		imageDisplay,
+	)
+
 	// Generate initial image
 	generateCheckerboard()
 	randomiseCorners()
 	refreshImage()
 
-	// Set window properties and run
-	mainWindow.SetContent(content)
+	// Set window layout based on options
+	if a.Preferences().BoolWithFallback("hideCorners", false) {
+		mainWindow.SetContent(noCornerButtonContent)
+	} else {
+		mainWindow.SetContent(cornerButtonContent)
+	}
+
+	// Show window and run
 	mainWindow.Show()
 	a.Run()
 }
