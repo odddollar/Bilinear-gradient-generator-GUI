@@ -14,11 +14,10 @@ func showOptions() {
 	// Width and height entry boxes
 	widthEntry := widget.NewEntry()
 	widthEntry.Validator = validation.NewRegexp(`^([3-9]|[0-9]{2,})$`, "Must be greater than 2")
+	widthEntry.SetText(strconv.Itoa(a.Preferences().IntWithFallback("width", 512)))
 	heightEntry := widget.NewEntry()
 	heightEntry.Validator = validation.NewRegexp(`^([3-9]|[0-9]{2,})$`, "Must be greater than 2")
-
-	widthEntry.SetText("512")
-	heightEntry.SetText("512")
+	heightEntry.SetText(strconv.Itoa(a.Preferences().IntWithFallback("height", 512)))
 
 	// Minimum alpha entry box
 	// Anything less than 255 will give a random value for alpha between
@@ -47,6 +46,12 @@ func showOptions() {
 		options,
 		func(b bool) {
 			if b {
+				// Update width and height
+				w, _ := strconv.Atoi(widthEntry.Text)
+				a.Preferences().SetInt("width", w)
+				h, _ := strconv.Atoi(heightEntry.Text)
+				a.Preferences().SetInt("height", h)
+
 				// Update minimum alpha
 				t, _ := strconv.Atoi(alphaEntry.Text)
 				a.Preferences().SetInt("minimumAlpha", t)
