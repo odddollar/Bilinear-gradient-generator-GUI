@@ -17,6 +17,7 @@ func showOptions() {
 
 	// Randomise alpha checkbox
 	alphaCheckbox := widget.NewCheck("", func(b bool) {})
+	alphaCheckbox.SetChecked(a.Preferences().BoolWithFallback("randomiseAlpha", false))
 
 	// Hide corner button checkbox
 	hideCorners := widget.NewCheck("", func(b bool) {})
@@ -36,7 +37,10 @@ func showOptions() {
 		"Cancel",
 		options,
 		func(b bool) {
-
+			if b {
+				// Update alpha
+				a.Preferences().SetBool("randomiseAlpha", alphaCheckbox.Checked)
+			}
 		},
 		mainWindow,
 	)
