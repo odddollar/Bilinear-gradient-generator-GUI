@@ -9,30 +9,30 @@ import (
 // Generate gradient from values in corner pixels and update image state
 func generateImage() {
 	// Convert corner pixel data type to individual channel arrays
-	redArray := [512][512]uint8{}
-	greenArray := [512][512]uint8{}
-	blueArray := [512][512]uint8{}
-	alphaArray := [512][512]uint8{}
+	redArray := *createArray()
+	greenArray := *createArray()
+	blueArray := *createArray()
+	alphaArray := *createArray()
 
 	redArray[0][0] = global.TopLeftPixel.R
 	greenArray[0][0] = global.TopLeftPixel.G
 	blueArray[0][0] = global.TopLeftPixel.B
 	alphaArray[0][0] = global.TopLeftPixel.A
 
-	redArray[0][511] = global.TopRightPixel.R
-	greenArray[0][511] = global.TopRightPixel.G
-	blueArray[0][511] = global.TopRightPixel.B
-	alphaArray[0][511] = global.TopRightPixel.A
+	redArray[0][widthMinusOne] = global.TopRightPixel.R
+	greenArray[0][widthMinusOne] = global.TopRightPixel.G
+	blueArray[0][widthMinusOne] = global.TopRightPixel.B
+	alphaArray[0][widthMinusOne] = global.TopRightPixel.A
 
-	redArray[511][0] = global.BottomLeftPixel.R
-	greenArray[511][0] = global.BottomLeftPixel.G
-	blueArray[511][0] = global.BottomLeftPixel.B
-	alphaArray[511][0] = global.BottomLeftPixel.A
+	redArray[heightMinusOne][0] = global.BottomLeftPixel.R
+	greenArray[heightMinusOne][0] = global.BottomLeftPixel.G
+	blueArray[heightMinusOne][0] = global.BottomLeftPixel.B
+	alphaArray[heightMinusOne][0] = global.BottomLeftPixel.A
 
-	redArray[511][511] = global.BottomRightPixel.R
-	greenArray[511][511] = global.BottomRightPixel.G
-	blueArray[511][511] = global.BottomRightPixel.B
-	alphaArray[511][511] = global.BottomRightPixel.A
+	redArray[heightMinusOne][widthMinusOne] = global.BottomRightPixel.R
+	greenArray[heightMinusOne][widthMinusOne] = global.BottomRightPixel.G
+	blueArray[heightMinusOne][widthMinusOne] = global.BottomRightPixel.B
+	alphaArray[heightMinusOne][widthMinusOne] = global.BottomRightPixel.A
 
 	// Fill individual arrays with interpolated values
 	fillArray(&redArray)
@@ -42,12 +42,12 @@ func generateImage() {
 
 	// Create image bounding box
 	upLeft := image.Point{X: 0, Y: 0}
-	lowRight := image.Point{X: 512, Y: 512}
+	lowRight := image.Point{X: width, Y: height}
 	img := image.NewNRGBA(image.Rectangle{Min: upLeft, Max: lowRight})
 
 	// Iterate through pixels
-	for y := 0; y < 512; y++ {
-		for x := 0; x < 512; x++ {
+	for y := 0; y < height; y++ {
+		for x := 0; x < width; x++ {
 			// Set colour
 			red := uint8(redArray[y][x])
 			green := uint8(greenArray[y][x])
@@ -62,27 +62,27 @@ func generateImage() {
 }
 
 // Calculate all interpolated values for array
-func fillArray(array *[512][512]uint8) {
-	for y := 0; y < 512; y++ {
-		for x := 0; x < 512; x++ {
+func fillArray(array *[][]uint8) {
+	for y := 0; y < height; y++ {
+		for x := 0; x < width; x++ {
 			calculateAndSet(x, y, array)
 		}
 	}
 }
 
 // Calculate and update individual value for position in array
-func calculateAndSet(posX, posY int, array *[512][512]uint8) {
+func calculateAndSet(posX, posY int, array *[][]uint8) {
 	// Calculate weights with floating-point division
-	topLeftWeight := float64((511-posX)*(511-posY)) / (511 * 511)
-	topRightWeight := float64(posX*(511-posY)) / (511 * 511)
-	bottomLeftWeight := float64((511-posX)*posY) / (511 * 511)
-	bottomRightWeight := float64(posX*posY) / (511 * 511)
+	topLeftWeight := float64((widthMinusOne-posX)*(heightMinusOne-posY)) / float64(widthMinusOne*heightMinusOne)
+	topRightWeight := float64(posX*(heightMinusOne-posY)) / float64(widthMinusOne*heightMinusOne)
+	bottomLeftWeight := float64((widthMinusOne-posX)*posY) / float64(widthMinusOne*heightMinusOne)
+	bottomRightWeight := float64(posX*posY) / float64(widthMinusOne*heightMinusOne)
 
 	// Calculate interpolated value
-	calc := topLeftWeight*float64(array[0][0]) +
-		topRightWeight*float64(array[0][511]) +
-		bottomLeftWeight*float64(array[511][0]) +
-		bottomRightWeight*float64(array[511][511])
+	calc := topLeftWeight*float64((*array)[0][0]) +
+		topRightWeight*float64((*array)[0][widthMinusOne]) +
+		bottomLeftWeight*float64((*array)[heightMinusOne][0]) +
+		bottomRightWeight*float64((*array)[heightMinusOne][widthMinusOne])
 
 	// Set value in array
 	(*array)[posY][posX] = uint8(calc)

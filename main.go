@@ -98,7 +98,6 @@ func main() {
 	)
 
 	// Generate initial image
-	image_handling.GenerateCheckerboard()
 	image_handling.RandomiseCorners()
 	image_handling.RefreshImage()
 

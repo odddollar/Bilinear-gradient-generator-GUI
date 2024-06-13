@@ -6,6 +6,8 @@ import (
 	"math/rand"
 )
 
+var width, height, widthMinusOne, heightMinusOne int
+
 // Randomise values in all corner pixel variables
 func RandomiseCorners() {
 	// What minimum alpha should be used
@@ -40,6 +42,12 @@ func RandomiseCorners() {
 
 // Refresh displayed image
 func RefreshImage() {
+	// Get width and height from preferences
+	width = global.A.Preferences().IntWithFallback("width", 512)
+	height = global.A.Preferences().IntWithFallback("height", 512)
+	widthMinusOne = width - 1
+	heightMinusOne = height - 1
+
 	// Generate new image from corner values
 	generateImage()
 

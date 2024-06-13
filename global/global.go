@@ -11,10 +11,7 @@ import (
 )
 
 // Holds global image state
-var (
-	ImageCurrent image.Image
-	Checkerboard image.Image
-)
+var ImageCurrent image.Image
 
 // Holds corner pixels
 var (
