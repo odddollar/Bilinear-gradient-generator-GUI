@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Bilinear-gradient-generator-GUI/global"
 	"image/color"
 
 	"fyne.io/fyne/v2/dialog"
@@ -15,7 +16,7 @@ func pickColour(cornerColour *color.NRGBA) {
 
 		// Refresh image with new corner value
 		refreshImage()
-	}, mainWindow)
+	}, global.MainWindow)
 	d.Advanced = true
 	d.SetColor(cornerColour)
 	d.Show()

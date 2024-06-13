@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Bilinear-gradient-generator-GUI/global"
 	"image"
 	"image/color"
 	"math/rand"
@@ -14,28 +15,28 @@ func randomRange(min, max int) uint8 {
 // Randomise values in all corner pixel variables
 func randomiseCorners() {
 	// What minimum alpha should be used
-	minAlpha := a.Preferences().IntWithFallback("minimumAlpha", 255)
+	minAlpha := global.A.Preferences().IntWithFallback("minimumAlpha", 255)
 
 	// Randomise each corner
-	topLeftPixel = color.NRGBA{
+	global.TopLeftPixel = color.NRGBA{
 		R: uint8(rand.Intn(256)),
 		G: uint8(rand.Intn(256)),
 		B: uint8(rand.Intn(256)),
 		A: randomRange(minAlpha, 256),
 	}
-	topRightPixel = color.NRGBA{
+	global.TopRightPixel = color.NRGBA{
 		R: uint8(rand.Intn(256)),
 		G: uint8(rand.Intn(256)),
 		B: uint8(rand.Intn(256)),
 		A: randomRange(minAlpha, 256),
 	}
-	bottomLeftPixel = color.NRGBA{
+	global.BottomLeftPixel = color.NRGBA{
 		R: uint8(rand.Intn(256)),
 		G: uint8(rand.Intn(256)),
 		B: uint8(rand.Intn(256)),
 		A: randomRange(minAlpha, 256),
 	}
-	bottomRightPixel = color.NRGBA{
+	global.BottomRightPixel = color.NRGBA{
 		R: uint8(rand.Intn(256)),
 		G: uint8(rand.Intn(256)),
 		B: uint8(rand.Intn(256)),
@@ -52,8 +53,8 @@ func refreshImage() {
 	img := combineCheckerboard()
 
 	// Update image display
-	imageDisplay.Image = img
-	imageDisplay.Refresh()
+	global.ImageDisplay.Image = img
+	global.ImageDisplay.Refresh()
 }
 
 // Generate gradient from values in corner pixels and update image state
@@ -64,25 +65,25 @@ func generateImage() {
 	blueArray := [512][512]uint8{}
 	alphaArray := [512][512]uint8{}
 
-	redArray[0][0] = topLeftPixel.R
-	greenArray[0][0] = topLeftPixel.G
-	blueArray[0][0] = topLeftPixel.B
-	alphaArray[0][0] = topLeftPixel.A
+	redArray[0][0] = global.TopLeftPixel.R
+	greenArray[0][0] = global.TopLeftPixel.G
+	blueArray[0][0] = global.TopLeftPixel.B
+	alphaArray[0][0] = global.TopLeftPixel.A
 
-	redArray[0][511] = topRightPixel.R
-	greenArray[0][511] = topRightPixel.G
-	blueArray[0][511] = topRightPixel.B
-	alphaArray[0][511] = topRightPixel.A
+	redArray[0][511] = global.TopRightPixel.R
+	greenArray[0][511] = global.TopRightPixel.G
+	blueArray[0][511] = global.TopRightPixel.B
+	alphaArray[0][511] = global.TopRightPixel.A
 
-	redArray[511][0] = bottomLeftPixel.R
-	greenArray[511][0] = bottomLeftPixel.G
-	blueArray[511][0] = bottomLeftPixel.B
-	alphaArray[511][0] = bottomLeftPixel.A
+	redArray[511][0] = global.BottomLeftPixel.R
+	greenArray[511][0] = global.BottomLeftPixel.G
+	blueArray[511][0] = global.BottomLeftPixel.B
+	alphaArray[511][0] = global.BottomLeftPixel.A
 
-	redArray[511][511] = bottomRightPixel.R
-	greenArray[511][511] = bottomRightPixel.G
-	blueArray[511][511] = bottomRightPixel.B
-	alphaArray[511][511] = bottomRightPixel.A
+	redArray[511][511] = global.BottomRightPixel.R
+	greenArray[511][511] = global.BottomRightPixel.G
+	blueArray[511][511] = global.BottomRightPixel.B
+	alphaArray[511][511] = global.BottomRightPixel.A
 
 	// Fill individual arrays with interpolated values
 	fillArray(&redArray)
@@ -108,7 +109,7 @@ func generateImage() {
 		}
 	}
 
-	imageCurrent = img
+	global.ImageCurrent = img
 }
 
 // Calculate all interpolated values for array

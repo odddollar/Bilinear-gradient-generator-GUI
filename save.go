@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Bilinear-gradient-generator-GUI/global"
 	"image/png"
 
 	"fyne.io/fyne/v2"
@@ -18,11 +19,11 @@ func saveImage() {
 		defer uc.Close()
 
 		// Encode and save image
-		png.Encode(uc, imageCurrent)
+		png.Encode(uc, global.ImageCurrent)
 
 		// Successful save
-		dialog.ShowInformation("Success", "Save successful", mainWindow)
-	}, mainWindow)
+		dialog.ShowInformation("Success", "Save successful", global.MainWindow)
+	}, global.MainWindow)
 	d.SetFileName("image.png")
 	d.Show()
 }

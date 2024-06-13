@@ -1,10 +1,9 @@
 package main
 
 import (
-	"image"
-	"image/color"
+	"Bilinear-gradient-generator-GUI/global"
+	"Bilinear-gradient-generator-GUI/widgets"
 
-	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
@@ -12,125 +11,88 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-// Holds global image state
-var (
-	imageCurrent image.Image
-	checkerboard image.Image
-)
-
-// Holds corner pixels
-var (
-	topLeftPixel     color.NRGBA
-	topRightPixel    color.NRGBA
-	bottomLeftPixel  color.NRGBA
-	bottomRightPixel color.NRGBA
-)
-
-// Variables to hold widgets
-var (
-	a                 fyne.App
-	mainWindow        fyne.Window
-	imageDisplay      *canvas.Image
-	randomiseButton   *widget.Button
-	saveButton        *widget.Button
-	optionsButton     *widget.Button
-	aboutButton       *widget.Button
-	topLeftButton     *widget.Button
-	topRightButton    *widget.Button
-	bottomLeftButton  *widget.Button
-	bottomRightButton *widget.Button
-	spacer            *Spacer
-)
-
-// Variables to hold different layouts
-// One holds layout with corner buttons, the other without
-var (
-	cornerButtonContent   *fyne.Container
-	noCornerButtonContent *fyne.Container
-)
-
 func main() {
 	// Create app and window
-	a = app.New()
-	mainWindow = a.NewWindow("Bilinear Gradient Generator GUI")
+	global.A = app.New()
+	global.MainWindow = global.A.NewWindow("Bilinear Gradient Generator GUI")
 
 	// Canvas to display current image
-	imageDisplay = canvas.NewImageFromImage(imageCurrent)
-	imageDisplay.FillMode = canvas.ImageFillOriginal
+	global.ImageDisplay = canvas.NewImageFromImage(global.ImageCurrent)
+	global.ImageDisplay.FillMode = canvas.ImageFillOriginal
 
 	// Button to randomly generate new image
-	randomiseButton = widget.NewButton("Randomise", func() {
+	global.RandomiseButton = widget.NewButton("Randomise", func() {
 		randomiseCorners()
 		refreshImage()
 	})
-	randomiseButton.Importance = widget.HighImportance
+	global.RandomiseButton.Importance = widget.HighImportance
 
 	// Button to save current image
-	saveButton = widget.NewButton("Save PNG", saveImage)
+	global.SaveButton = widget.NewButton("Save PNG", saveImage)
 
 	// Button to open options
-	optionsButton = widget.NewButtonWithIcon("", theme.MenuIcon(), showOptions)
+	global.OptionsButton = widget.NewButtonWithIcon("", theme.MenuIcon(), showOptions)
 
 	// Button to show about information
-	aboutButton = widget.NewButtonWithIcon("", theme.InfoIcon(), showAbout)
+	global.AboutButton = widget.NewButtonWithIcon("", theme.InfoIcon(), showAbout)
 
 	// Buttons to change corner pixel values
-	topLeftButton = widget.NewButton("...", func() { pickColour(&topLeftPixel) })
-	topRightButton = widget.NewButton("...", func() { pickColour(&topRightPixel) })
-	bottomLeftButton = widget.NewButton("...", func() { pickColour(&bottomLeftPixel) })
-	bottomRightButton = widget.NewButton("...", func() { pickColour(&bottomRightPixel) })
+	global.TopLeftButton = widget.NewButton("...", func() { pickColour(&global.TopLeftPixel) })
+	global.TopRightButton = widget.NewButton("...", func() { pickColour(&global.TopRightPixel) })
+	global.BottomLeftButton = widget.NewButton("...", func() { pickColour(&global.BottomLeftPixel) })
+	global.BottomRightButton = widget.NewButton("...", func() { pickColour(&global.BottomRightPixel) })
 
-	// Create spacer with same width as button with "..." text
-	spacer = NewSpacer(widget.NewButton("...", func() {}).MinSize())
+	// Create global.Spacer with same width as button with "..." text
+	global.SpacerWidget = widgets.NewSpacer(widget.NewButton("...", func() {}).MinSize())
 
 	// Create layout with corner buttons
-	cornerButtonContent = container.NewBorder(
+	global.CornerButtonContent = container.NewBorder(
 		container.NewBorder(
 			nil,
 			nil,
-			topLeftButton,
-			topRightButton,
+			global.TopLeftButton,
+			global.TopRightButton,
 			nil,
 		),
 		container.NewBorder(
 			container.NewBorder(
 				nil,
 				nil,
-				bottomLeftButton,
-				bottomRightButton,
+				global.BottomLeftButton,
+				global.BottomRightButton,
 				nil,
 			),
 			nil,
 			nil,
 			container.NewHBox(
-				saveButton,
-				optionsButton,
-				aboutButton,
+				global.SaveButton,
+				global.OptionsButton,
+				global.AboutButton,
 			),
-			randomiseButton,
+			global.RandomiseButton,
 		),
-		spacer,
-		spacer,
-		imageDisplay,
+		global.SpacerWidget,
+		global.SpacerWidget,
+		global.ImageDisplay,
 	)
 
 	// Create layout without corner buttons
-	noCornerButtonContent = container.NewBorder(
+	global.NoCornerButtonContent = container.NewBorder(
 		nil,
 		container.NewBorder(
 			nil,
 			nil,
 			nil,
 			container.NewHBox(
-				saveButton,
-				optionsButton,
-				aboutButton,
+				global.SaveButton,
+				global.OptionsButton,
+				global.AboutButton,
 			),
-			randomiseButton,
+			global.RandomiseButton,
 		),
 		nil,
 		nil,
-		imageDisplay,
+		global.ImageDisplay,
 	)
 
 	// Generate initial image
@@ -139,13 +101,13 @@ func main() {
 	refreshImage()
 
 	// Set window layout based on options
-	if a.Preferences().BoolWithFallback("hideCorners", false) {
-		mainWindow.SetContent(noCornerButtonContent)
+	if global.A.Preferences().BoolWithFallback("hideCorners", false) {
+		global.MainWindow.SetContent(global.NoCornerButtonContent)
 	} else {
-		mainWindow.SetContent(cornerButtonContent)
+		global.MainWindow.SetContent(global.CornerButtonContent)
 	}
 
 	// Show window and run
-	mainWindow.Show()
-	a.Run()
+	global.MainWindow.Show()
+	global.A.Run()
 }

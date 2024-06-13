@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Bilinear-gradient-generator-GUI/global"
 	"image"
 	"image/color"
 	"image/draw"
@@ -31,7 +32,7 @@ func generateCheckerboard() {
 		}
 	}
 
-	checkerboard = img
+	global.Checkerboard = img
 }
 
 // Overlay image state on checkerboard and return new image
@@ -42,10 +43,10 @@ func combineCheckerboard() image.Image {
 	img := image.NewNRGBA(image.Rectangle{Min: upLeft, Max: lowRight})
 
 	// Draw checkerboard base image
-	draw.Draw(img, img.Bounds(), checkerboard, image.Point{}, draw.Src)
+	draw.Draw(img, img.Bounds(), global.Checkerboard, image.Point{}, draw.Src)
 
 	// Draw gradient over top
-	draw.Draw(img, img.Bounds(), imageCurrent, image.Point{}, draw.Over)
+	draw.Draw(img, img.Bounds(), global.ImageCurrent, image.Point{}, draw.Over)
 
 	return img
 }
