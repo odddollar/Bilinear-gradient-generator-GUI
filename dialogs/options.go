@@ -1,4 +1,4 @@
-package main
+package dialogs
 
 import (
 	"Bilinear-gradient-generator-GUI/global"
@@ -11,7 +11,7 @@ import (
 )
 
 // Show options in dialog
-func showOptions() {
+func ShowOptions() {
 	// Width and height entry boxes
 	widthEntry := widget.NewEntry()
 	widthEntry.Validator = validation.NewRegexp(`^([3-9]|[0-9]{2,})$`, "Must be greater than 2")

@@ -1,4 +1,4 @@
-package main
+package dialogs
 
 import (
 	"Bilinear-gradient-generator-GUI/global"
@@ -10,7 +10,7 @@ import (
 )
 
 // Show about information in dialog
-func showAbout() {
+func ShowAbout() {
 	// Create layout
 	// Separate markdown widget for better spacing
 	d := container.NewVBox(

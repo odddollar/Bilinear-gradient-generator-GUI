@@ -1,7 +1,9 @@
 package main
 
 import (
+	"Bilinear-gradient-generator-GUI/dialogs"
 	"Bilinear-gradient-generator-GUI/global"
+	"Bilinear-gradient-generator-GUI/image_handling"
 	"Bilinear-gradient-generator-GUI/widgets"
 
 	"fyne.io/fyne/v2/app"
@@ -22,25 +24,25 @@ func main() {
 
 	// Button to randomly generate new image
 	global.RandomiseButton = widget.NewButton("Randomise", func() {
-		randomiseCorners()
-		refreshImage()
+		image_handling.RandomiseCorners()
+		image_handling.RefreshImage()
 	})
 	global.RandomiseButton.Importance = widget.HighImportance
 
 	// Button to save current image
-	global.SaveButton = widget.NewButton("Save PNG", saveImage)
+	global.SaveButton = widget.NewButton("Save PNG", dialogs.SaveImage)
 
 	// Button to open options
-	global.OptionsButton = widget.NewButtonWithIcon("", theme.MenuIcon(), showOptions)
+	global.OptionsButton = widget.NewButtonWithIcon("", theme.MenuIcon(), dialogs.ShowOptions)
 
 	// Button to show about information
-	global.AboutButton = widget.NewButtonWithIcon("", theme.InfoIcon(), showAbout)
+	global.AboutButton = widget.NewButtonWithIcon("", theme.InfoIcon(), dialogs.ShowAbout)
 
 	// Buttons to change corner pixel values
-	global.TopLeftButton = widget.NewButton("...", func() { pickColour(&global.TopLeftPixel) })
-	global.TopRightButton = widget.NewButton("...", func() { pickColour(&global.TopRightPixel) })
-	global.BottomLeftButton = widget.NewButton("...", func() { pickColour(&global.BottomLeftPixel) })
-	global.BottomRightButton = widget.NewButton("...", func() { pickColour(&global.BottomRightPixel) })
+	global.TopLeftButton = widget.NewButton("...", func() { dialogs.PickColour(&global.TopLeftPixel) })
+	global.TopRightButton = widget.NewButton("...", func() { dialogs.PickColour(&global.TopRightPixel) })
+	global.BottomLeftButton = widget.NewButton("...", func() { dialogs.PickColour(&global.BottomLeftPixel) })
+	global.BottomRightButton = widget.NewButton("...", func() { dialogs.PickColour(&global.BottomRightPixel) })
 
 	// Create global.Spacer with same width as button with "..." text
 	global.SpacerWidget = widgets.NewSpacer(widget.NewButton("...", func() {}).MinSize())
@@ -96,9 +98,9 @@ func main() {
 	)
 
 	// Generate initial image
-	generateCheckerboard()
-	randomiseCorners()
-	refreshImage()
+	image_handling.GenerateCheckerboard()
+	image_handling.RandomiseCorners()
+	image_handling.RefreshImage()
 
 	// Set window layout based on options
 	if global.A.Preferences().BoolWithFallback("hideCorners", false) {

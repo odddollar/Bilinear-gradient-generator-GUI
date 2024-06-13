@@ -1,4 +1,4 @@
-package main
+package dialogs
 
 import (
 	"Bilinear-gradient-generator-GUI/global"
@@ -9,7 +9,7 @@ import (
 )
 
 // Save current image state (without checkerboard)
-func saveImage() {
+func SaveImage() {
 	// Create new dialog to save image
 	d := dialog.NewFileSave(func(uc fyne.URIWriteCloser, err error) {
 		// Prevent crashing if nothing was selected

@@ -1,4 +1,4 @@
-package main
+package image_handling
 
 import (
 	"Bilinear-gradient-generator-GUI/global"
@@ -13,7 +13,7 @@ func randomRange(min, max int) uint8 {
 }
 
 // Randomise values in all corner pixel variables
-func randomiseCorners() {
+func RandomiseCorners() {
 	// What minimum alpha should be used
 	minAlpha := global.A.Preferences().IntWithFallback("minimumAlpha", 255)
 
@@ -45,12 +45,12 @@ func randomiseCorners() {
 }
 
 // Refresh displayed image
-func refreshImage() {
+func RefreshImage() {
 	// Generate new image from corner values
 	generateImage()
 
 	// Draw checkerboard then overlay image
-	img := combineCheckerboard()
+	img := CombineCheckerboard()
 
 	// Update image display
 	global.ImageDisplay.Image = img

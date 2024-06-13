@@ -1,4 +1,4 @@
-package main
+package image_handling
 
 import (
 	"Bilinear-gradient-generator-GUI/global"
@@ -8,7 +8,7 @@ import (
 )
 
 // Generate checkerboard and update checkerboard state
-func generateCheckerboard() {
+func GenerateCheckerboard() {
 	// Size of image and individual tiles
 	width := 512
 	height := 512
@@ -36,7 +36,7 @@ func generateCheckerboard() {
 }
 
 // Overlay image state on checkerboard and return new image
-func combineCheckerboard() image.Image {
+func CombineCheckerboard() image.Image {
 	// Create image bounding box
 	upLeft := image.Point{X: 0, Y: 0}
 	lowRight := image.Point{X: 512, Y: 512}
