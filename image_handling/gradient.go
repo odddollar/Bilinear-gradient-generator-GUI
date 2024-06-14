@@ -49,10 +49,10 @@ func generateImage() {
 	for y := 0; y < height; y++ {
 		for x := 0; x < width; x++ {
 			// Set colour
-			red := uint8(redArray[y][x])
-			green := uint8(greenArray[y][x])
-			blue := uint8(blueArray[y][x])
-			alpha := uint8(alphaArray[y][x])
+			red := redArray[y][x]
+			green := greenArray[y][x]
+			blue := blueArray[y][x]
+			alpha := alphaArray[y][x]
 			col := color.NRGBA{R: red, G: green, B: blue, A: alpha}
 			img.SetNRGBA(x, y, col)
 		}
