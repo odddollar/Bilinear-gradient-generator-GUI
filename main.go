@@ -7,7 +7,6 @@ import (
 	"Bilinear-gradient-generator-GUI/widgets"
 
 	"fyne.io/fyne/v2/app"
-	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
@@ -19,8 +18,7 @@ func main() {
 	global.MainWindow = global.A.NewWindow("Bilinear Gradient Generator GUI")
 
 	// Canvas to display current image
-	global.ImageDisplay = canvas.NewImageFromImage(global.ImageCurrent)
-	global.ImageDisplay.FillMode = canvas.ImageFillOriginal
+	global.ImageDisplay = widgets.NewColourPicker(global.ImageCurrent)
 
 	// Button to randomly generate new image
 	global.RandomiseButton = widget.NewButton("Randomise", func() {

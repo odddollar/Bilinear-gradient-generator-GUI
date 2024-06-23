@@ -18,7 +18,7 @@ func NewSpacer(minSize fyne.Size) *Spacer {
 	return s
 }
 
-// Returns new renderer for spacer
+// Returns new renderer for Spacer
 func (s *Spacer) CreateRenderer() fyne.WidgetRenderer {
 	return &spacerRenderer{spacer: s}
 }

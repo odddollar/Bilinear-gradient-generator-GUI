@@ -6,7 +6,6 @@ import (
 	"image/color"
 
 	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/widget"
 )
 
@@ -25,7 +24,7 @@ var (
 var (
 	A                 fyne.App
 	MainWindow        fyne.Window
-	ImageDisplay      *canvas.Image
+	ImageDisplay      *widgets.ImageColourPicker
 	RandomiseButton   *widget.Button
 	SaveButton        *widget.Button
 	OptionsButton     *widget.Button
