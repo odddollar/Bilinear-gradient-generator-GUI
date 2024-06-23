@@ -13,7 +13,8 @@ import (
 // Custom widget that extends image display with picker functionality
 type ImageColourPicker struct {
 	widget.BaseWidget
-	Image image.Image
+	Image    image.Image
+	renderer *imageColourPickerRenderer
 }
 
 // Creates new ImageColourPicker widget
@@ -27,7 +28,13 @@ func NewColourPicker(img image.Image) *ImageColourPicker {
 func (p *ImageColourPicker) CreateRenderer() fyne.WidgetRenderer {
 	img := canvas.NewImageFromImage(p.Image)
 	img.FillMode = canvas.ImageFillOriginal
-	return widget.NewSimpleRenderer(img)
+	renderer := &imageColourPickerRenderer{
+		image:   img,
+		picker:  p,
+		objects: []fyne.CanvasObject{img},
+	}
+	p.renderer = renderer
+	return renderer
 }
 
 // Get image colour at tapped point
@@ -43,3 +50,41 @@ func (p *ImageColourPicker) Tapped(event *fyne.PointEvent) {
 		log.Printf("Clicked at (%d, %d), Colour: %#v\n", x, y, col)
 	}
 }
+
+// Refresh the widget and its children/renderer
+func (p *ImageColourPicker) Refresh() {
+	p.BaseWidget.Refresh()
+	p.renderer.Refresh()
+}
+
+// Renderer for ImageColourPicker widget
+type imageColourPickerRenderer struct {
+	picker  *ImageColourPicker
+	image   *canvas.Image
+	objects []fyne.CanvasObject
+}
+
+// Returns minimum size of ImageColourPicker widget
+func (r *imageColourPickerRenderer) MinSize() fyne.Size {
+	return r.image.MinSize()
+}
+
+// Resizes image to fit available space
+func (r *imageColourPickerRenderer) Layout(size fyne.Size) {
+	r.image.Resize(size)
+}
+
+// Refreshes canvas on which image displayed
+func (r *imageColourPickerRenderer) Refresh() {
+	// Set displayed canvas's image to image of picker widget
+	r.image.Image = r.picker.Image
+	canvas.Refresh(r.image)
+}
+
+// Returns child widgets of ImageColourPicker
+func (r *imageColourPickerRenderer) Objects() []fyne.CanvasObject {
+	return r.objects
+}
+
+// Does nothing as ImageColourPicker doesn't hold any resources
+func (r *imageColourPickerRenderer) Destroy() {}
