@@ -2,7 +2,7 @@
 
 Uses bilinear-interpolation to generate random colour gradients. A random value is selected for each corner of the image, then bilinear-interpolation is used to interpolate the remaining pixels. This is repeated 4 times. These 4 separate pixel arrays are then combined into the red, green, blue and alpha channels to produce a final image.
 
-Version 2 adds the ability to manually select the colour of each corner and have them be used to generate the gradient.
+Version 2 adds the ability to manually select the colour of each corner and have them be used to generate the gradient. Click on the gradient to get the exact colour of a pixel!
 
 Based *very* heavily on [Bilinear gradient generator](https://github.com/odddollar/Bilinear-gradient-generator).
 
