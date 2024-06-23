@@ -13,9 +13,11 @@ import (
 // Custom widget that extends image display with picker functionality
 type ImageColourPicker struct {
 	widget.BaseWidget
-	// Image will be manually assigned
-	Image    image.Image
 	renderer *imageColourPickerRenderer
+
+	// Images will be manually assigned
+	ActualImage  image.Image
+	DisplayImage image.Image
 }
 
 // Creates new ImageColourPicker widget
@@ -27,7 +29,7 @@ func NewColourPicker() *ImageColourPicker {
 
 // Returns new rendered for ImageColourPicker
 func (p *ImageColourPicker) CreateRenderer() fyne.WidgetRenderer {
-	img := canvas.NewImageFromImage(p.Image)
+	img := canvas.NewImageFromImage(p.DisplayImage)
 	img.FillMode = canvas.ImageFillOriginal
 	renderer := &imageColourPickerRenderer{
 		image:   img,
@@ -45,9 +47,9 @@ func (p *ImageColourPicker) Tapped(event *fyne.PointEvent) {
 	y := int(event.Position.Y)
 
 	// Check point within image
-	if x >= 0 && y >= 0 && x < p.Image.Bounds().Dx() && y < p.Image.Bounds().Dy() {
+	if x >= 0 && y >= 0 && x < p.ActualImage.Bounds().Dx() && y < p.ActualImage.Bounds().Dy() {
 		// Get NRGBA value a clicked point
-		col := p.Image.At(x, y).(color.NRGBA)
+		col := p.ActualImage.At(x, y).(color.NRGBA)
 		log.Printf("Clicked at (%d, %d), Colour: %#v\n", x, y, col)
 	}
 }
@@ -77,8 +79,7 @@ func (r *imageColourPickerRenderer) Layout(size fyne.Size) {
 
 // Refreshes canvas on which image displayed
 func (r *imageColourPickerRenderer) Refresh() {
-	// Set displayed canvas's image to image of picker widget
-	r.image.Image = r.picker.Image
+	r.image.Image = r.picker.DisplayImage
 	canvas.Refresh(r.image)
 }
 
