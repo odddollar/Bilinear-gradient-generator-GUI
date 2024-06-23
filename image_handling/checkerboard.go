@@ -8,7 +8,7 @@ import (
 )
 
 // Generate checkerboard and overlay main image
-func CombineCheckerboard() image.Image {
+func combineCheckerboard() image.Image {
 	// Size of individual tiles
 	tileSize := 16
 

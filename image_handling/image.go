@@ -52,6 +52,6 @@ func RefreshImage() {
 	generateImage()
 
 	// Draw checkerboard, overlay image and update image display
-	global.ImageDisplay.Image = CombineCheckerboard()
+	global.ImageDisplay.Image = combineCheckerboard()
 	global.ImageDisplay.Refresh()
 }

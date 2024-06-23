@@ -18,7 +18,7 @@ func main() {
 	global.MainWindow = global.A.NewWindow("Bilinear Gradient Generator GUI")
 
 	// Canvas to display current image
-	global.ImageDisplay = widgets.NewColourPicker(global.ImageCurrent)
+	global.ImageDisplay = widgets.NewColourPicker()
 
 	// Button to randomly generate new image
 	global.RandomiseButton = widget.NewButton("Randomise", func() {

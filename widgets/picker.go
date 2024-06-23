@@ -13,13 +13,14 @@ import (
 // Custom widget that extends image display with picker functionality
 type ImageColourPicker struct {
 	widget.BaseWidget
+	// Image will be manually assigned
 	Image    image.Image
 	renderer *imageColourPickerRenderer
 }
 
 // Creates new ImageColourPicker widget
-func NewColourPicker(img image.Image) *ImageColourPicker {
-	picker := &ImageColourPicker{Image: img}
+func NewColourPicker() *ImageColourPicker {
+	picker := &ImageColourPicker{}
 	picker.ExtendBaseWidget(picker)
 	return picker
 }
