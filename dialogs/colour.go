@@ -7,6 +7,7 @@ import (
 	"image"
 	"image/color"
 	"image/draw"
+	"strings"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
@@ -31,7 +32,7 @@ func ShowColour(col color.NRGBA) {
 	a := widget.NewEntry()
 	a.SetText(fmt.Sprintf("%d", col.A))
 	hex := widget.NewEntry()
-	hex.SetText(fmt.Sprintf("#%02X%02X%02X", col.R, col.G, col.B))
+	hex.SetText(strings.ToLower(fmt.Sprintf("#%02X%02X%02X", col.R, col.G, col.B)))
 
 	// Create label widgets and set styling
 	rl := widget.NewLabel("Red")
