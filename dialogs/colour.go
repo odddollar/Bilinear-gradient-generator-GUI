@@ -2,6 +2,7 @@ package dialogs
 
 import (
 	"Bilinear-gradient-generator-GUI/global"
+	"Bilinear-gradient-generator-GUI/widgets"
 	"fmt"
 	"image"
 	"image/color"
@@ -49,29 +50,35 @@ func ShowColour(col color.NRGBA) {
 	hl.Alignment = fyne.TextAlignTrailing
 	hl.TextStyle = fyne.TextStyle{Bold: true}
 
+	// Create small vertical spacer to pad bottom of dialog
+	spacer := widgets.NewSpacer(fyne.NewSize(0, 10))
+
 	// Create layout
-	d := container.NewHBox(
-		container.NewVBox(
-			img,
-			container.NewBorder(
-				nil,
-				nil,
-				hl,
-				nil,
-				hex,
+	d := container.NewVBox(
+		container.NewHBox(
+			container.NewVBox(
+				img,
+				container.NewBorder(
+					nil,
+					nil,
+					hl,
+					nil,
+					hex,
+				),
+			),
+			container.NewGridWithColumns(
+				2,
+				rl,
+				r,
+				gl,
+				g,
+				bl,
+				b,
+				al,
+				a,
 			),
 		),
-		container.NewGridWithColumns(
-			2,
-			rl,
-			r,
-			gl,
-			g,
-			bl,
-			b,
-			al,
-			a,
-		),
+		spacer,
 	)
 
 	// Show dialog with layout
