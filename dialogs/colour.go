@@ -15,9 +15,11 @@ import (
 
 // Show selected colour information in dialog
 func ShowColour(col color.NRGBA) {
+	// Make image from colour
 	img := canvas.NewImageFromImage(makeColour(col))
 	img.FillMode = canvas.ImageFillOriginal
 
+	// Set pixel channel values
 	r := widget.NewEntry()
 	r.SetText(fmt.Sprintf("%d", col.R))
 	g := widget.NewEntry()
@@ -29,11 +31,15 @@ func ShowColour(col color.NRGBA) {
 	hex := widget.NewEntry()
 	hex.SetText(fmt.Sprintf("#%02X%02X%02X", col.R, col.G, col.B))
 
+	// Create layout
 	d := container.NewHBox(
 		container.NewVBox(
 			img,
-			container.NewHBox(
+			container.NewBorder(
+				nil,
+				nil,
 				widget.NewLabel("Hex"),
+				nil,
 				hex,
 			),
 		),
@@ -50,6 +56,7 @@ func ShowColour(col color.NRGBA) {
 		),
 	)
 
+	// Show dialog with layout
 	dialog.ShowCustom(
 		"Selected Colour",
 		"OK",
