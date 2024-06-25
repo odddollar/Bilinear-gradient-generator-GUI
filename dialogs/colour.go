@@ -7,6 +7,7 @@ import (
 	"image/color"
 	"image/draw"
 
+	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/dialog"
@@ -31,6 +32,23 @@ func ShowColour(col color.NRGBA) {
 	hex := widget.NewEntry()
 	hex.SetText(fmt.Sprintf("#%02X%02X%02X", col.R, col.G, col.B))
 
+	// Create label widgets and set styling
+	rl := widget.NewLabel("Red")
+	rl.Alignment = fyne.TextAlignTrailing
+	rl.TextStyle = fyne.TextStyle{Bold: true}
+	gl := widget.NewLabel("Green")
+	gl.Alignment = fyne.TextAlignTrailing
+	gl.TextStyle = fyne.TextStyle{Bold: true}
+	bl := widget.NewLabel("Blue")
+	bl.Alignment = fyne.TextAlignTrailing
+	bl.TextStyle = fyne.TextStyle{Bold: true}
+	al := widget.NewLabel("Alpha")
+	al.Alignment = fyne.TextAlignTrailing
+	al.TextStyle = fyne.TextStyle{Bold: true}
+	hl := widget.NewLabel("Hex")
+	hl.Alignment = fyne.TextAlignTrailing
+	hl.TextStyle = fyne.TextStyle{Bold: true}
+
 	// Create layout
 	d := container.NewHBox(
 		container.NewVBox(
@@ -38,20 +56,20 @@ func ShowColour(col color.NRGBA) {
 			container.NewBorder(
 				nil,
 				nil,
-				widget.NewLabel("Hex"),
+				hl,
 				nil,
 				hex,
 			),
 		),
 		container.NewGridWithColumns(
 			2,
-			widget.NewLabel("Red"),
+			rl,
 			r,
-			widget.NewLabel("Green"),
+			gl,
 			g,
-			widget.NewLabel("Blue"),
+			bl,
 			b,
-			widget.NewLabel("Alpha"),
+			al,
 			a,
 		),
 	)
