@@ -3,7 +3,6 @@ package widgets
 import (
 	"image"
 	"image/color"
-	"log"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
@@ -13,21 +12,23 @@ import (
 // Custom widget that extends image display with picker functionality
 type ImageColourPicker struct {
 	widget.BaseWidget
-	renderer *imageColourPickerRenderer
+	renderer       *imageColourPickerRenderer
+	tappedCallback func(color.NRGBA)
 
 	// Images will be manually assigned
 	ActualImage  image.Image
 	DisplayImage image.Image
 }
 
-// Creates new ImageColourPicker widget
-func NewColourPicker() *ImageColourPicker {
-	picker := &ImageColourPicker{}
+// Creates new ImageColourPicker widget.
+// Callback is run when widget is clicked
+func NewColourPicker(t func(color.NRGBA)) *ImageColourPicker {
+	picker := &ImageColourPicker{tappedCallback: t}
 	picker.ExtendBaseWidget(picker)
 	return picker
 }
 
-// Returns new rendered for ImageColourPicker
+// Returns new renderer for ImageColourPicker
 func (p *ImageColourPicker) CreateRenderer() fyne.WidgetRenderer {
 	img := canvas.NewImageFromImage(p.DisplayImage)
 	img.FillMode = canvas.ImageFillOriginal
@@ -49,8 +50,8 @@ func (p *ImageColourPicker) Tapped(event *fyne.PointEvent) {
 	// Check point within image
 	if x >= 0 && y >= 0 && x < p.ActualImage.Bounds().Dx() && y < p.ActualImage.Bounds().Dy() {
 		// Get NRGBA value a clicked point
-		col := p.ActualImage.At(x, y).(color.NRGBA)
-		log.Printf("Clicked at (%d, %d), Colour: %#v\n", x, y, col)
+		c := p.ActualImage.At(x, y).(color.NRGBA)
+		p.tappedCallback(c)
 	}
 }
 
