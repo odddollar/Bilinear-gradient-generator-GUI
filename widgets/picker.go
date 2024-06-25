@@ -88,12 +88,19 @@ func (p *ImageColourPicker) Tapped(event *fyne.PointEvent) {
 
 	// Check point within image
 	if clickedX >= left && clickedY >= top && clickedX < right && clickedY < bottom {
-		fmt.Println("Inside")
+		// Get clicked position relative to image location
+		relativeClickedX := clickedX - left
+		relativeClickedY := clickedY - top
+
+		// Map clicked relative position to values in original image
+		mappedClickedX := mapRange(relativeClickedX, 0, newWidth, 0, imgWidth)
+		mappedClickedY := mapRange(relativeClickedY, 0, newHeight, 0, imgHeight)
+
+		fmt.Println(relativeClickedX, relativeClickedY, mappedClickedX, mappedClickedY)
+
 		// Get NRGBA value a clicked point
-		// c := p.ActualImage.At(x, y).(color.NRGBA)
-		// p.tappedCallback(c)
-	} else {
-		fmt.Println("Outside")
+		c := p.ActualImage.At(mappedClickedX, mappedClickedY).(color.NRGBA)
+		p.tappedCallback(c)
 	}
 }
 
