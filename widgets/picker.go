@@ -1,6 +1,7 @@
 package widgets
 
 import (
+	"fmt"
 	"image"
 	"image/color"
 
@@ -45,15 +46,54 @@ func (p *ImageColourPicker) CreateRenderer() fyne.WidgetRenderer {
 
 // Get image colour at tapped point
 func (p *ImageColourPicker) Tapped(event *fyne.PointEvent) {
-	// Get cursor click position
-	x := int(event.Position.X)
-	y := int(event.Position.Y)
+	// Get widths and heights
+	imgWidth := float32(p.DisplayImage.Bounds().Dx())
+	imgHeight := float32(p.DisplayImage.Bounds().Dy())
+	canvasWidth := p.renderer.image.Size().Width
+	canvasHeight := p.renderer.image.Size().Height
+
+	// Calculate aspect ratios
+	imgAspect := imgWidth / imgHeight
+	canvasAspect := canvasWidth / canvasHeight
+
+	// Get new width and height of image
+	var newWidth, newHeight float32
+	if imgAspect > canvasAspect {
+		// Image is wider relative to canvas
+		newWidth = canvasWidth
+		newHeight = canvasWidth / imgAspect
+	} else {
+		// Image is taller relative to canvas
+		newWidth = canvasHeight * imgAspect
+		newHeight = canvasHeight
+	}
+
+	// Calculate bounds
+	top := (canvasHeight / 2) - (newHeight / 2)
+	bottom := (canvasHeight / 2) + (newHeight / 2)
+	left := (canvasWidth / 2) - (newWidth / 2)
+	right := (canvasWidth / 2) + (newWidth / 2)
+
+	fmt.Println("Clicked: ", event.Position)
+	fmt.Println("Canvas size: ", canvasWidth, canvasHeight)
+	fmt.Println("Canvas aspect: ", canvasAspect)
+	fmt.Println("Image size: ", imgWidth, imgHeight)
+	fmt.Println("Image aspect: ", imgAspect)
+	fmt.Println("New image size: ", newWidth, newHeight)
+	fmt.Printf("Top: %f, Bottom: %f, Left: %f, Right: %f\n", top, bottom, left, right)
+	fmt.Println("---")
+
+	clickedX := event.Position.X
+	clickedY := event.Position.Y
 
 	// Check point within image
-	if x >= 0 && y >= 0 && x < p.ActualImage.Bounds().Dx() && y < p.ActualImage.Bounds().Dy() {
+	if clickedX >= left && clickedY >= top && clickedX < right && clickedY < bottom {
+		fmt.Println("Inside")
 		// Get NRGBA value a clicked point
-		c := p.ActualImage.At(x, y).(color.NRGBA)
-		p.tappedCallback(c)
+		// c := p.ActualImage.At(x, y).(color.NRGBA)
+		// p.tappedCallback(c)
+	} else {
+		fmt.Println("Outside")
 	}
 }
 
