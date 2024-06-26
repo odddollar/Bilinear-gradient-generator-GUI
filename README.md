@@ -26,3 +26,5 @@ fyne package --release
 ![Image 2](screenshots/image2.png)
 
 ![Image 3](screenshots/image3.png)
+
+![Image 4](screenshots/image4.png)
