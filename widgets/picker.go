@@ -6,6 +6,7 @@ import (
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
+	"fyne.io/fyne/v2/driver/desktop"
 	"fyne.io/fyne/v2/widget"
 )
 
@@ -14,6 +15,7 @@ type ImageColourPicker struct {
 	widget.BaseWidget
 	renderer       *imageColourPickerRenderer
 	tappedCallback func(color.NRGBA)
+	cursor         desktop.Cursor
 
 	// Holds internal image state
 	actualImage  image.Image
@@ -30,8 +32,9 @@ func NewColourPicker(t func(color.NRGBA)) *ImageColourPicker {
 
 	// Create new object with placeholder image and callback
 	picker := &ImageColourPicker{
-		img:            i,
+		cursor:         desktop.CrosshairCursor,
 		tappedCallback: t,
+		img:            i,
 	}
 
 	// Extend base widget and return
@@ -54,6 +57,38 @@ func (p *ImageColourPicker) SetImage(a, d image.Image) {
 
 // Get image colour at tapped point
 func (p *ImageColourPicker) Tapped(event *fyne.PointEvent) {
+	// Check if clicked inside actual image
+	if inside, x, y := p.isInImage(event.Position); inside {
+		// Get NRGBA value a clicked point
+		c := p.actualImage.At(x, y).(color.NRGBA)
+		p.tappedCallback(c)
+	}
+}
+
+// Update cursor when it moves inside image
+func (p *ImageColourPicker) MouseMoved(event *desktop.MouseEvent) {
+	// Check if moved inside actual image
+	if inside, _, _ := p.isInImage(event.Position); inside {
+		p.cursor = desktop.CrosshairCursor
+	} else {
+		p.cursor = desktop.DefaultCursor
+	}
+}
+
+// Does nothing but implements interface
+func (p *ImageColourPicker) MouseIn(event *desktop.MouseEvent) {}
+
+// Does nothing but implements interface
+func (p *ImageColourPicker) MouseOut() {}
+
+// Return current cursor
+func (p *ImageColourPicker) Cursor() desktop.Cursor {
+	return p.cursor
+}
+
+// Take position in canvas and check if in actual image, also returning mapped x and y
+// within image
+func (p *ImageColourPicker) isInImage(pos fyne.Position) (bool, int, int) {
 	// Get widths and heights
 	imgWidth := float32(p.displayImage.Bounds().Dx())
 	imgHeight := float32(p.displayImage.Bounds().Dy())
@@ -82,24 +117,19 @@ func (p *ImageColourPicker) Tapped(event *fyne.PointEvent) {
 	left := (canvasWidth / 2) - (newWidth / 2)
 	right := (canvasWidth / 2) + (newWidth / 2)
 
-	// Mouse click position
-	clickedX := event.Position.X
-	clickedY := event.Position.Y
+	// Get position relative to image location
+	relativeX := pos.X - left
+	relativeY := pos.Y - top
+
+	// Map relative position to values in original image
+	mappedClickedX := mapRange(relativeX, 0, newWidth-1, 0, imgWidth-1)
+	mappedClickedY := mapRange(relativeY, 0, newHeight-1, 0, imgHeight-1)
 
 	// Check point within image
-	if clickedX >= left && clickedY >= top && clickedX < right && clickedY < bottom {
-		// Get clicked position relative to image location
-		relativeClickedX := clickedX - left
-		relativeClickedY := clickedY - top
-
-		// Map clicked relative position to values in original image
-		mappedClickedX := mapRange(relativeClickedX, 0, newWidth-1, 0, imgWidth-1)
-		mappedClickedY := mapRange(relativeClickedY, 0, newHeight-1, 0, imgHeight-1)
-
-		// Get NRGBA value a clicked point
-		c := p.actualImage.At(mappedClickedX, mappedClickedY).(color.NRGBA)
-		p.tappedCallback(c)
+	if pos.X >= left && pos.Y >= top && pos.X < right && pos.Y < bottom {
+		return true, mappedClickedX, mappedClickedY
 	}
+	return false, mappedClickedX, mappedClickedY
 }
 
 // Returns new renderer for ImageColourPicker
