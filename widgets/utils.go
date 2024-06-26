@@ -1,6 +1,8 @@
 package widgets
 
-import "math"
+import (
+	"math"
+)
 
 // Map value between old range to be between new range
 func mapRange(value, oldMin, oldMax, newMin, newMax float32) int {

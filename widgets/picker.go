@@ -12,7 +12,7 @@ import (
 // Custom widget that extends image display with picker functionality
 type ImageColourPicker struct {
 	widget.BaseWidget
-	//renderer *imageColourPickerRenderer
+	renderer       *imageColourPickerRenderer
 	tappedCallback func(color.NRGBA)
 
 	// Holds internal image state
@@ -53,71 +53,63 @@ func (p *ImageColourPicker) SetImage(a, d image.Image) {
 }
 
 // Get image colour at tapped point
-// func (p *ImageColourPicker) Tapped(event *fyne.PointEvent) {
-// 	// Get widths and heights
-// 	imgWidth := float32(p.displayImage.Bounds().Dx())
-// 	imgHeight := float32(p.displayImage.Bounds().Dy())
-// 	canvasWidth := p.renderer.image.Size().Width
-// 	canvasHeight := p.renderer.image.Size().Height
+func (p *ImageColourPicker) Tapped(event *fyne.PointEvent) {
+	// Get widths and heights
+	imgWidth := float32(p.displayImage.Bounds().Dx())
+	imgHeight := float32(p.displayImage.Bounds().Dy())
+	canvasWidth := p.renderer.img.Size().Width
+	canvasHeight := p.renderer.img.Size().Height
 
-// 	// Calculate aspect ratios
-// 	imgAspect := imgWidth / imgHeight
-// 	canvasAspect := canvasWidth / canvasHeight
+	// Calculate aspect ratios
+	imgAspect := imgWidth / imgHeight
+	canvasAspect := canvasWidth / canvasHeight
 
-// 	// Get new width and height of image
-// 	var newWidth, newHeight float32
-// 	if imgAspect > canvasAspect {
-// 		// Image is wider relative to canvas
-// 		newWidth = canvasWidth
-// 		newHeight = canvasWidth / imgAspect
-// 	} else {
-// 		// Image is taller relative to canvas
-// 		newWidth = canvasHeight * imgAspect
-// 		newHeight = canvasHeight
-// 	}
+	// Get new width and height of image
+	var newWidth, newHeight float32
+	if imgAspect > canvasAspect {
+		// Image is wider relative to canvas
+		newWidth = canvasWidth
+		newHeight = canvasWidth / imgAspect
+	} else {
+		// Image is taller relative to canvas
+		newWidth = canvasHeight * imgAspect
+		newHeight = canvasHeight
+	}
 
-// 	// Calculate bounds
-// 	top := (canvasHeight / 2) - (newHeight / 2)
-// 	bottom := (canvasHeight / 2) + (newHeight / 2)
-// 	left := (canvasWidth / 2) - (newWidth / 2)
-// 	right := (canvasWidth / 2) + (newWidth / 2)
+	// Calculate bounds
+	top := (canvasHeight / 2) - (newHeight / 2)
+	bottom := (canvasHeight / 2) + (newHeight / 2)
+	left := (canvasWidth / 2) - (newWidth / 2)
+	right := (canvasWidth / 2) + (newWidth / 2)
 
-// 	// fmt.Println("Clicked: ", event.Position)
-// 	// fmt.Println("Canvas size: ", canvasWidth, canvasHeight)
-// 	// fmt.Println("Canvas aspect: ", canvasAspect)
-// 	// fmt.Println("Image size: ", imgWidth, imgHeight)
-// 	// fmt.Println("Image aspect: ", imgAspect)
-// 	// fmt.Println("New image size: ", newWidth, newHeight)
-// 	// fmt.Printf("Top: %f, Bottom: %f, Left: %f, Right: %f\n", top, bottom, left, right)
-// 	// fmt.Println("---")
+	// Mouse click position
+	clickedX := event.Position.X
+	clickedY := event.Position.Y
 
-// 	clickedX := event.Position.X
-// 	clickedY := event.Position.Y
+	// Check point within image
+	if clickedX >= left && clickedY >= top && clickedX < right && clickedY < bottom {
+		// Get clicked position relative to image location
+		relativeClickedX := clickedX - left
+		relativeClickedY := clickedY - top
 
-// 	// Check point within image
-// 	if clickedX >= left && clickedY >= top && clickedX < right && clickedY < bottom {
-// 		// Get clicked position relative to image location
-// 		relativeClickedX := clickedX - left
-// 		relativeClickedY := clickedY - top
+		// Map clicked relative position to values in original image
+		mappedClickedX := mapRange(relativeClickedX, 0, newWidth-1, 0, imgWidth-1)
+		mappedClickedY := mapRange(relativeClickedY, 0, newHeight-1, 0, imgHeight-1)
 
-// 		// Map clicked relative position to values in original image
-// 		mappedClickedX := mapRange(relativeClickedX, 0, newWidth, 0, imgWidth)
-// 		mappedClickedY := mapRange(relativeClickedY, 0, newHeight, 0, imgHeight)
-
-// 		// fmt.Println(relativeClickedX, relativeClickedY, mappedClickedX, mappedClickedY)
-
-// 		// Get NRGBA value a clicked point
-// 		c := p.actualImage.At(mappedClickedX, mappedClickedY).(color.NRGBA)
-// 		p.tappedCallback(c)
-// 	}
-// }
+		// Get NRGBA value a clicked point
+		c := p.actualImage.At(mappedClickedX, mappedClickedY).(color.NRGBA)
+		p.tappedCallback(c)
+	}
+}
 
 // Returns new renderer for ImageColourPicker
 func (p *ImageColourPicker) CreateRenderer() fyne.WidgetRenderer {
-	return &imageColourPickerRenderer{
+	renderer := &imageColourPickerRenderer{
 		icp: p,
 		img: p.img,
 	}
+	p.renderer = renderer
+	return renderer
 }
 
 // Renderer for ImageColourPicker widget
