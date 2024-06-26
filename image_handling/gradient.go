@@ -4,6 +4,7 @@ import (
 	"Bilinear-gradient-generator-GUI/global"
 	"image"
 	"image/color"
+	"math"
 )
 
 // Generate gradient from values in corner pixels and update image state
@@ -85,5 +86,5 @@ func calculateAndSet(posX, posY int, array *[][]uint8) {
 		bottomRightWeight*float64((*array)[heightMinusOne][widthMinusOne])
 
 	// Set value in array
-	(*array)[posY][posX] = uint8(calc)
+	(*array)[posY][posX] = uint8(math.Round(calc))
 }
