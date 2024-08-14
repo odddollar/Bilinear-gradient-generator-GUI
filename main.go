@@ -57,7 +57,7 @@ func main() {
 		container.NewBorder(
 			container.NewBorder(
 				nil,
-				nil,
+				widget.NewSeparator(),
 				global.BottomLeftButton,
 				global.BottomRightButton,
 				nil,
@@ -80,7 +80,7 @@ func main() {
 	global.NoCornerButtonContent = container.NewBorder(
 		nil,
 		container.NewBorder(
-			nil,
+			widget.NewSeparator(),
 			nil,
 			nil,
 			container.NewHBox(
