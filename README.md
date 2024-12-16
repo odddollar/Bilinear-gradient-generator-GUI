@@ -1,4 +1,4 @@
-# Bilinear gradient generator GUI
+# Bilinear Gradient Generator GUI
 
 Uses bilinear-interpolation to generate random colour gradients. A random value is selected for each corner of the image, then bilinear-interpolation is used to interpolate the remaining pixels. This is repeated 4 times. These 4 separate pixel arrays are then combined into the red, green, blue and alpha channels to produce a final image.
 
